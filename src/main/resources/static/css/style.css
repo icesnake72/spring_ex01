@@ -1,0 +1,24 @@
+
+.btn-bd-javong {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bs-indigo);
+  --bs-btn-border-color: var(--bs-indigo);
+  --bs-btn-border-radius: .5rem;
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg: var(--bs-purple);
+  --bs-btn-hover-border-color: var(--bs-purple);
+  --bs-btn-focus-shadow-rgb: var(--bs-purple);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: var(--bs-purple);
+  --bs-btn-active-border-color: var(--bs-purple);
+}
+
+
+.javong-background {
+    background-color: white;
+}
+
+.jv-link {
+    color: #495057;
+}

@@ -1,0 +1,53 @@
+{{>header}}
+
+<div class="container-fluid mt-5 mb-5  justify-content-align-center">
+    <div class="mt-5" align="center">
+        <h1>자봉 프로젝트<img src="/img/icons8.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></h1>
+
+        <div class="mt-5">
+            <h5>회원가입</h5>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6 mt-1">
+            <form action="/trysignup" method="post" class="row g-3 needs-validation" novalidate>
+                <input type="email" name="email" class="form-control mt-5 pt-2" placeholder="e-mail" aria-label="e-mail" required>
+                <div class="invalid-feedback">
+                    Please provide a valid email.
+                </div>
+                <input type="text" name="nickname" class="form-control mt-3 pt-2" placeholder="Nick Name" aria-label="Nick Name" required>
+                <div class="invalid-feedback">
+                    Please provide a valid nick name.
+                </div>
+                <input type="password" name="password" class="form-control mt-3 pt-2" placeholder="password" id="inputPassword4" required>
+                <div class="invalid-feedback">
+                    Please provide a valid password.
+                </div>
+                <input type="password" name="confPassword" class="form-control mt-3 pt-2" placeholder="confirm password" id="inputPassword5" required>
+                <div class="invalid-feedback">
+                    Please provide a valid password.
+                </div>
+                <button type="submit" class="btn btn-primary mt-5" id="submitButton" disabled>Sign Up</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+  const input1 = document.getElementById('inputPassword4');
+  const input2 = document.getElementById('inputPassword5');
+  const myButton = document.getElementById('submitButton');
+
+  input1.addEventListener('input', checkInputs);
+  input2.addEventListener('input', checkInputs);
+
+  function checkInputs() {
+    if (input1.value === input2.value) {
+      myButton.disabled = false;
+    } else {
+      myButton.disabled = true;
+    }
+  }
+</script>
+
+
+{{>footer}}
