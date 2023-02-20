@@ -1,5 +1,6 @@
 package com.sdcompany.javong.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +12,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.net.URL;
 
 @Controller
+@Slf4j
 public class JavongController {
+
+    @GetMapping("/")
+    public String StartPage() {
+        log.info( "test" );
+
+        return "index.html";
+    }
 
     @RequestMapping("/hi")
     public String hello(@RequestParam("username")String username, Long userid, @NotNull Model model)
