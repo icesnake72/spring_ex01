@@ -1,6 +1,5 @@
 package com.sdcompany.javong.controller;
 
-import com.sdcompany.javong.dto.SignInForm;
 import com.sdcompany.javong.dto.TodoForm;
 import com.sdcompany.javong.entity.SignIn;
 import com.sdcompany.javong.entity.TodoList;
@@ -12,12 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-
-import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 
 @Controller
 @Slf4j
@@ -34,8 +33,21 @@ public class TodoController {
         TodoList savedTodo = todoRepos.save(todo);
         log.info( savedTodo.toString() );
 
+        return ToHello(savedTodo.getUserid(), model);
+    }
+
+    @RequestMapping("/todos")
+    public String ReadTodos(@RequestParam String userid, @NotNull Model model) {
+
+        Long lUserid = Long.parseLong(userid);
+
+        return ToHello(lUserid, model);
+    }
+
+
+    public String ToHello(Long userid, Model model) {
         // userid 로 SignIn Entity에서 User정보를 불러온다
-        Optional<SignIn> siList = signInRepository.findById(todo.getUserid());
+        Optional<SignIn> siList = signInRepository.findById(userid);
         if ( !siList.isPresent() )
             throw (new IllegalArgumentException());
 
@@ -46,13 +58,18 @@ public class TodoController {
 
         List<TodoList> todos = todoRepos.findByUserid(String.format("%d", si.getId()));
         if ( todos.isEmpty() ) {
-
+            log.info( "todos is empty!!!" );
         }
         else {
-
+//            log.info( todos.toString() );
+            ArrayList<TodoList> arrTodos = new ArrayList<>();
+            for(TodoList myTodo : todos) {
+                arrTodos.add(myTodo);
+            }
+            model.addAttribute("todos", arrTodos);
+            log.info( arrTodos.toString() );
         }
 
         return "/hello";
     }
-
 }

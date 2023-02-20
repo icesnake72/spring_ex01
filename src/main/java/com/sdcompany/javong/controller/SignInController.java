@@ -32,65 +32,30 @@ public class SignInController {
     }
 
     @PostMapping("/signin")
-    public String TrySignIn(@NotNull SignInForm sf) {
+    public String TrySignIn(@NotNull SignInForm sf, Model model) {
         log.info( sf.toString() );
 
         SignIn si = sf.toEntity();
         log.info( si.toString() );
 
         List<SignIn> signIn = siRepos.findByEmail( si.getEmail() );
-  //      log.info( signIn.getEmail() + signIn.getPassword() );
         for(SignIn sis : signIn){
-            if ( sis.getEmail().equals(si.getEmail()))
-                return makeHiUrl(sis.getNickname(), sis.getId());
+            if ( sis.getEmail().equals(si.getEmail()) )
+            {
+                // read data
+                // model.addAttribute("userid", sis.getId());
+                String url = String.format("/todos?userid=%d", sis.getId());
+
+                return url;
+                // return "/todos";
+            }
         }
-
-
-
-//        List<SignIn> sis = siRepos.findAll();
-
-
-//        if ( sis instanceof Collection )
-//            log.info( "Iterable is Collection!!");
-//
-//        for(SignIn sie : sis) {
-//            log.info( sie.getEmail() );
-//            log.info( si.getEmail() );
-//            if ( sie.getEmail().equals(si.getEmail()) )
-//                return makeHiUrl(sie.getEmail());
-//        }
-
-
-//        Iterator<SignIn> iter = sis.iterator();
-//
-//        while(iter.hasNext())
-//        {
-//            SignIn sie = iter.next();
-//            log.info( sie.getEmail() );
-//            log.info( si.getEmail() );
-//            if ( sie.getEmail().equals(si.getEmail()) )
-//                return makeHiUrl(sie.getEmail());
-//        }
-
-//        for(SignIn sie : sis) {
-//            if ( sie.getEmail()==si.getEmail() )
-//                return makeHiUrl(sie.getEmail());
-//        }
-
         return "/signup";
     }
 
-    @RequestMapping("/error_page")
-    public String ErrorMessage(@RequestParam("errorMsg")String strError, @NotNull Model model) {
-        model.addAttribute("errorMsg", strError);
-        return "/error_msg";
-    }
-
-
-
 
     @PostMapping("/trysignup")
-    public String TrySignUp(@NotNull SignUpForm sf) {
+    public String TrySignUp(@NotNull SignUpForm sf, Model model) {
         log.info( sf.toString() );
 
         SignIn si = sf.toEntity();
@@ -100,12 +65,19 @@ public class SignInController {
         try {
             savedSi = siRepos.save(si);
         } catch (Exception e) {
-            return "/error_page?errorMsg=이미 존재하는 이메일 입니다.";
+            String strMsg = String.format("%s는 이미 존재하는 이메일입니다.", si.getEmail());
+            model.addAttribute("errorMsg", strMsg);
+            return "/error_msg";
         }
 
         log.info( savedSi.toString() );
 
-        return makeHiUrl(savedSi.getNickname(), savedSi.getId());
+        model.addAttribute("username", savedSi.getNickname());
+        model.addAttribute("userid", savedSi.getId());
+
+        return "hello";
+
+        // return makeHiUrl(savedSi.getNickname(), savedSi.getId());
     }
 
 }
