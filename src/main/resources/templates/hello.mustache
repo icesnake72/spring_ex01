@@ -39,25 +39,7 @@
 
 </div>
 
-
-<script>
-function OnDoneButtonClick(id, userid, done) {
-  console.log(id);
-  console.log(userid);
-  console.log(document.location.href);
-  pos = document.location.href.lastIndexOf('/');  // 현재 위치한 url 문자열에서 뒤에서부터 '/'를 찾는다
-  url = document.location.href.substr(0, pos);    // url변수에 포트번호까지만 잘라낸다
-
-  url = url + '/updatetodo' + '?id=' + id + '&userid=' + userid + '&done=' + done;   // 업데이트를 호출할 url을 만든다
-  console.log(url);
-
-  window.location=url;    // 위에서 만든 update url을 호출한다!!!
-}
-
-
-
-
-</script>
+<script src="/js/javong_utils.js" ></script>
 
 
 {{>footer}}

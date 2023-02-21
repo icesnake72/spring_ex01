@@ -27,9 +27,8 @@ public class SignInController {
     @Autowired
     private SignInRepository siRepos;
 
-    private String makeHiUrl(String username, Long userid) {
-        return String.format("/hi?username=%s&userid=%d", username, userid);
-    }
+    @Autowired
+    private TodoController todoController;
 
     @PostMapping("/signin")
     public String TrySignIn(@NotNull SignInForm sf, Model model) {
@@ -44,10 +43,10 @@ public class SignInController {
             {
                 // read data
                 // model.addAttribute("userid", sis.getId());
-                String url = String.format("/todos?userid=%d", sis.getId());
+                // String url = String.format("/todos?userid=%d", sis.getId());
+                return todoController.ToHello(sis.getId(), model);
 
-                return url;
-                // return "/todos";
+                // return url;
             }
         }
         return "/signup";
