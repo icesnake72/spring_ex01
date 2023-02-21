@@ -22,12 +22,15 @@
         <div class="col-lg-6 mt-5">
             <ul>{{#todos}}</ul>
                 <li>
-                    {{todo}}
+<!--                      <input type="hidden" value="{{id}}" name="todoid">-->
                     {{#done}}
-                        <input type="checkbox" checked>
+                      <del>{{todo}}</del>
+                      <input type="button" onclick="OnDoneButtonClick({{id}}, {{userid}}, 0)" class="chk-button">
                     {{/done}}
+
                     {{^done}}
-                        <input type="checkbox">
+                      {{todo}}
+                      <input type="button" onclick="OnDoneButtonClick({{id}}, {{userid}}, 1)" class="none-chk-button">
                     {{/done}}
                 </li>
             <ul>{{/todos}}</ul>
@@ -35,6 +38,26 @@
     </div>
 
 </div>
+
+
+<script>
+function OnDoneButtonClick(id, userid, done) {
+  console.log(id);
+  console.log(userid);
+  console.log(document.location.href);
+  pos = document.location.href.lastIndexOf('/');  // 현재 위치한 url 문자열에서 뒤에서부터 '/'를 찾는다
+  url = document.location.href.substr(0, pos);    // url변수에 포트번호까지만 잘라낸다
+
+  url = url + '/updatetodo' + '?id=' + id + '&userid=' + userid + '&done=' + done;   // 업데이트를 호출할 url을 만든다
+  console.log(url);
+
+  window.location=url;    // 위에서 만든 update url을 호출한다!!!
+}
+
+
+
+
+</script>
 
 
 {{>footer}}

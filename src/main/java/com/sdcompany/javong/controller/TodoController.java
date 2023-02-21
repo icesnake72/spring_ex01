@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,13 +37,32 @@ public class TodoController {
         return ToHello(savedTodo.getUserid(), model);
     }
 
-    @RequestMapping("/todos")
-    public String ReadTodos(@RequestParam String userid, @NotNull Model model) {
+    @RequestMapping(value = "/todos")
+    public String ReadTodos(@RequestParam Long userid, @NotNull Model model) {
 
-        Long lUserid = Long.parseLong(userid);
+        // Long lUserid = Long.parseLong(userid);
 
-        return ToHello(lUserid, model);
+        return ToHello(userid, model);
     }
+
+    @RequestMapping(value="/updatetodo")
+    public String UpdateTodo(@RequestParam Long id, @RequestParam Long userid, @RequestParam Boolean done) {
+
+        Optional<TodoList> todoList = todoRepos.findById(id);
+        if ( !todoList.isPresent() )
+            throw (new IllegalArgumentException());
+
+        TodoList todo = todoList.get();
+        todo.setDone(done);
+        TodoList savedTodo = todoRepos.save(todo);
+        if ( savedTodo==null )
+            log.info("savedTodo == null");
+
+        String url = String.format("/todos?userid=%d", userid);
+
+        return url;
+    }
+
 
 
     public String ToHello(Long userid, Model model) {

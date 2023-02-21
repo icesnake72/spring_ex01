@@ -39,6 +39,4 @@ public class JavongController {
     public String SignUp(Model model) {
         return "/signup";
     }
-
-
 }

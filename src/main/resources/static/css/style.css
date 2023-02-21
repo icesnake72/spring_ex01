@@ -22,3 +22,19 @@
 .jv-link {
     color: #495057;
 }
+
+.chk-button {
+    background: url( "/img/svg/check-circle.svg" ) no-repeat;
+    border: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.none-chk-button {
+    background: url( "/img/svg/circle.svg" ) no-repeat;
+    border: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
