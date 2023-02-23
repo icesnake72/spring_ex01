@@ -5,9 +5,11 @@
   --bs-btn-bg: var(--bs-indigo);
   --bs-btn-border-color: var(--bs-indigo);
   --bs-btn-border-radius: .5rem;
+
   --bs-btn-hover-color: var(--bs-white);
   --bs-btn-hover-bg: var(--bs-purple);
   --bs-btn-hover-border-color: var(--bs-purple);
+
   --bs-btn-focus-shadow-rgb: var(--bs-purple);
   --bs-btn-active-color: var(--bs-btn-hover-color);
   --bs-btn-active-bg: var(--bs-purple);
@@ -33,6 +35,15 @@
 
 .none-chk-button {
     background: url( "/img/svg/circle.svg" ) no-repeat;
+    border: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.del-button {
+    fill: red;
+    background: url( "/img/svg/x-circle.svg" ) no-repeat;
     border: none;
     width: 16px;
     height: 16px;

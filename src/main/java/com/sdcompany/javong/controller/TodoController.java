@@ -11,9 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +27,25 @@ public class TodoController {
     @Autowired
     private SignInRepository signInRepository;
 
+    //@Autowired
+    //private RedirectAttributes redirect;
+
 
 
     @PostMapping("/addtodo")
-    public String AddTodo(@NotNull TodoForm todoForm, @NotNull Model model) {
+    public String AddTodo(@NotNull TodoForm todoForm, @NotNull Model model, @NotNull RedirectAttributes attributes) {
         TodoList todo = todoForm.toEntity();
         TodoList savedTodo = todoRepos.save(todo);
         log.info( savedTodo.toString() );
+        log.info( attributes.toString() );
 
-        return ToHello(savedTodo.getUserid(), model);
+        attributes.addAttribute("userid", savedTodo.getUserid());
+        // attributes.addFlashAttribute("model", model);
+
+        return String.format("redirect:/todolist");
+
+        // return String.format("redirect:/todos?userid=%d", savedTodo.getUserid());
+        // return ToHello(savedTodo.getUserid(), model);
     }
 
     @RequestMapping(value = "/todos")
@@ -47,37 +56,36 @@ public class TodoController {
         return ToHello(userid, model);
     }
 
-    @PostMapping("/todolist")
-    public String TodoList(@RequestParam Long userid, Model model) {
+    @GetMapping("/todolist")
+    public String TodoList(@RequestParam Long userid, @NotNull Model model) {
+    //public String TodoList(@NotNull RedirectAttributes attributes) {
+        log.info( String.format("@@@ TodoController.TodoList(userid=%d, model=%s", userid, model.toString()) );
 
         return ToHello(userid, model);
     }
 
-    // @RequestMapping(value="/updatetodo")
-//    public String UpdateTodo(@RequestParam Long id, @RequestParam Long userid, @RequestParam Boolean done, Model model) {
-//
-//        Optional<TodoList> todoList = todoRepos.findById(id);
-//        if (!todoList.isPresent())
-//            throw (new IllegalArgumentException());
-//        TodoList todo = todoList.get();
-//        todo.setDone(done);
-//        try {
-//            TodoList savedTodo = todoRepos.save(todo);
-//        }
-//        catch (IllegalArgumentException iexc){
-//            String errMsg = String.format("todo 업데이트 중 IllegalArgumentException 발생 : %s", iexc.getMessage());
-//            model.addAttribute("errorMsg", errMsg);
-//            return "/error_msg";
-//        }
-//        catch (OptimisticLockingFailureException ofexc) {
-//            String errMsg = String.format("todo 업데이트 중 OptimisticLockingFailureException 발생 : %s", ofexc.getMessage());
-//            model.addAttribute("errorMsg", errMsg);
-//            return "/error_msg";
-//        }
-//
-//        return ToHello(userid, model);
-//        // return String.format("/todos?userid=%d", userid);
-//    }
+
+    @DeleteMapping("/deltodo")
+    public String DeleteTodo(@RequestParam Long id, Model model) {
+        Optional<TodoList> todo = todoRepos.findById(id);
+        if ( !todo.isPresent() )
+        {
+            String msg = String.format("해당 todo 데이터를 찾을 수 없습니다");
+            model.addAttribute("error_msg", msg);
+            return "/error_msg";
+        }
+
+        Long userid = todo.get().getUserid();
+        todoRepos.deleteById(id);
+
+        model.addAttribute("userid", userid);
+        //redirect.addFlashAttribute("model", model);
+
+        return String.format("redirect:/todolist");
+        // return ToHello(userid, model);
+    }
+
+
 
     @PostMapping("/updatetodo")
     public String UpdateTodo(@RequestParam Long id, @RequestParam Long userid, @RequestParam Boolean done, Model model) {

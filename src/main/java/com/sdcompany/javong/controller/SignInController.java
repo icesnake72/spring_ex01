@@ -38,18 +38,21 @@ public class SignInController {
         log.info( si.toString() );
 
         List<SignIn> signIn = siRepos.findByEmail( si.getEmail() );
+        if ( signIn.isEmpty() )
+            return "/signup";
+
         for(SignIn sis : signIn){
             if ( sis.getEmail().equals(si.getEmail()) )
             {
-                // read data
-                // model.addAttribute("userid", sis.getId());
-                // String url = String.format("/todos?userid=%d", sis.getId());
-                return todoController.ToHello(sis.getId(), model);
-
-                // return url;
+                if(sis.getPassword().equals(si.getPassword()))
+                    return todoController.ToHello(sis.getId(), model);
             }
         }
-        return "/signup";
+
+        String strMsg = String.format("로그인에 실패하였습니다.");
+        model.addAttribute("errorMsg", strMsg);
+
+        return "/error_msg";
     }
 
 
@@ -75,8 +78,6 @@ public class SignInController {
         model.addAttribute("userid", savedSi.getId());
 
         return "hello";
-
-        // return makeHiUrl(savedSi.getNickname(), savedSi.getId());
     }
 
 }

@@ -1,43 +1,48 @@
 {{>header}}
-<div class="container-fluid p-3">
+<div class="container p-3">
     <div class="row">
         <div class="col-lg-6">
             <p class="fs-4">
-                {{username}}님, 반갑습니다.&nbsp;&nbsp;&nbsp;
+                {{username}}님, 반갑습니다.&nbsp;&nbsp&nbsp
                 <a class="btn btn-primary" href="/" role="button">Sign Out</a>
             </p>
         </div>
     </div>
-    <div>
-        <div class="col-lg-6">
-            <form action="/addtodo" method="post" class="row g-3 needs-validation" novalidate>
-                <input type="text" name="todo" class="form-control mt-5 pt-2" placeholder="to-do" aria-label="to-do" required>
-                <div class="invalid-feedback">
-                    Please provide a valid to-do.
-                </div>
-                <input type="hidden" name="userid" value={{userid}} class="form-control mt-5 pt-2" placeholder="to-do" aria-label="to-do" required>
-                <button type="submit" class="btn btn-primary mt-5" id="submitButton">add</button>
-            </form>
-        </div>
-        <div class="col-lg-6 mt-5">
-            <ul>{{#todos}}</ul>
-                <li>
-<!--                      <input type="hidden" value="{{id}}" name="todoid">-->
-                    {{#done}}
-                      <del>{{todo}}</del>
-                      <input type="button" onclick="OnDoneButtonClick({{id}}, {{userid}}, 0)" class="chk-button">
-                    {{/done}}
 
-                    {{^done}}
-                      {{todo}}
-                      <input type="button" onclick="OnDoneButtonClick({{id}}, {{userid}}, 1)" class="none-chk-button">
-                    {{/done}}
-                </li>
-            <ul>{{/todos}}</ul>
-        </div>
+    <div class="col-lg-6">
+        <form action="/addtodo" method="post" class="row g-3 needs-validation" novalidate>
+          <div class="col-auto">
+            <input type="text" name="todo" class="form-control mt-5 pt-2" placeholder="여기에 할일을 입력하십시요" aria-label="to-do" required>
+            <div class="invalid-feedback">
+                Please provide a valid to-do.
+            </div>
+          </div>
+          <div class="col-auto">
+            <input type="hidden" name="userid" value={{userid}} class="form-control mt-5 pt-2" placeholder="to-do" aria-label="to-do" required>
+            <button type="submit" class="btn btn-primary mt-5" id="submitButton">add</button>
+          </div>
+        </form>
     </div>
 
+    <div class="col-lg-6 mt-5">
+        <ul>{{#todos}}</ul>
+            <li>
+<!--                      <input type="hidden" value="{{id}}" name="todoid">-->
+                {{#done}} <!-- if문(조건==참)으로 작동-->
+                  <del>{{todo}}</del>
+                  <input type="button" onclick="OnDoneButtonClick({{id}}, {{userid}}, 0)" class="chk-button">
+                  <input type="button" onclick="OnDelButtonClick({{id}}, {{userid}})" class="del-button">
+                {{/done}}
+
+                {{^done}} <!-- 위 if문의 else (조건==거짓)으로 작동-->
+                  {{todo}}
+                  <input type="button" onclick="OnDoneButtonClick({{id}}, {{userid}}, 1)" class="none-chk-button">
+                {{/done}}
+            </li>
+        <ul>{{/todos}}</ul>
+    </div>
 </div>
+
 
 <script src="/js/javong_utils.js" ></script>
 
